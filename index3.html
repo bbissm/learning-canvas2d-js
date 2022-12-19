@@ -1,0 +1,97 @@
+
+<html>
+  <head>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
+  </body>
+</html>
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+ 
+const player = {
+  x: 50,
+  y: 50,
+  width: 20,
+  height: 20,
+  speed: 5,
+  jumping: false,
+  jumpSpeed: 10,
+};
+
+const gravity = 0.5;
+const ground = canvas.height - player.height;
+
+let keys = {};
+//Here, we've defined a player object that represents our character, as well as a gravity constant that we'll use to simulate the effect of gravity on the player's jump. We've also defined a ground constant that represents the height of the ground in our game.
+
+//Now, let's set up the game loop and handle player movement:
+
+function update() {
+  // Apply gravity to player's vertical speed
+  player.y += player.jumpSpeed;
+  player.jumpSpeed += gravity;
+
+  // Keep player from falling through the ground
+  if (player.y > ground) {
+    player.y = ground;
+    player.jumping = false;
+  }
+
+  // Move player horizontally
+  if (keys[37]) {
+    // Left arrow key is pressed
+    player.x -= player.speed;
+  }
+  if (keys[39]) {
+    // Right arrow key is pressed
+    player.x += player.speed;
+  }
+
+  // Jump if player is on the ground and the space bar is pressed
+  if (keys[32] && !player.jumping) {
+    player.jumping = true;
+    player.jumpSpeed = -15;
+  }
+}
+
+function draw() {
+  // Clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const ctx2 = canvas.getContext("2d");
+
+  // Draw player
+  let img = new Image();
+  img.src = 'player.JPG';
+  img.width = 30;
+  img.height = 30;
+  let pattern = ctx2.createPattern(img,'no-repeat');
+  ctx2.fillStyle = pattern;
+  ctx2.fillRect(player.x, player.y, player.width, player.height);
+}
+
+function gameLoop() {
+  update();
+  draw();
+  requestAnimationFrame(gameLoop);
+}
+
+// Start the game loop
+gameLoop();
+//Finally, let's set up keyboard events to allow the player to control the character:
+
+
+document.addEventListener("keydown", (event) => {
+  keys[event.keyCode] = true;
+});
+
+document.addEventListener("keyup", (event) => {
+  keys[event.keyCode] = false;
+});
+</script>

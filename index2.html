@@ -2,47 +2,56 @@
     canvas {
        background-color:bisque;
     }
-   
 </style>
 <canvas id="myCanvas" width="400" height="400"></canvas>
 
+
+
 <script>
   var canvas = document.getElementById("myCanvas");
-  var ctx = canvas.getContext("2d");
-  canvas.height = 500;
-  canvas.width = 500;
 
-  var player = {
-    rectX: 10,
-    rectY : 10,
-    rectWidth : 50,
-    rectHeight : 50,
-    rectColor : "red",
-    rectSpeed : 20
+  var players = [
+    {
+        name:'player1',
+        rectX: 10,
+        rectY : 10,
+        rectWidth : 50,
+        rectHeight : 50,
+        rectColor : "red",
+        rectSpeed : 20,
+        imgSrc: 'player.JPG'
+  },
+  {
+        name:'player2',
+        rectX: 50,
+        rectY : 50,
+        rectWidth : 50,
+        rectHeight : 50,
+        rectColor : "red",
+        rectSpeed : 20,
+        imgSrc: 'player.JPG'
   }
-
-
-
+    ]
 
   function moveRectangle(code) {
-    console.log(code)
-    var speed = player.rectSpeed;
+    var speed = players[0].rectSpeed;
     switch (code) {
         case 37: //left
-            player.rectX -= speed;
+            players[0].rectX -= speed;
         break;
         case 38: //left
-            player.rectY -= speed;
+            players[0].rectY -= speed;
         break;
         case 39: //left
-            player.rectX += speed;
+            players[0].rectX += speed;
         break;
         case 40: //left
-            player.rectY += speed;
+            players[0].rectY += speed;
         break;
 
     }
-    ctx.fillRect(player.rectX, player.rectY, player.rectWidth, player.rectHeight);
+    var ctx = canvas.getContext('2d');
+    ctx.fillRect(players[0].rectX, players[0].rectY, players[0].rectWidth, players[0].rectHeight);
   }
 
   document.addEventListener("keydown", function(e) {
@@ -50,51 +59,35 @@
     })
 
 
-    /*// Draw player character and platforms
-    function draw() {
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Draw player character and platforms
+    function draw(player) {
+        var tempCanvas = document.createElement("canvas"),
+            tCtx = tempCanvas.getContext("2d");
 
-    // Draw player
-    var img = new Image();
-    img.src = "player.JPG";
-    img.onload = () => {
-        var pat = ctx.createPattern(img, "no-repeat");
-        //ctx.rect(0, 0, 150, 100);
-        ctx.fillStyle = pat;
-        ctx.fillRect(player.rectX, player.rectY, player.rectWidth, player.rectHeight)
+        tempCanvas.width = player.rectWidth;
+        tempCanvas.height = player.rectHeight;
+        tCtx.drawImage(player.img, 0, 0, player.img.width, player.img.height, 0, 0, player.rectWidth, player.rectHeight);
+
+
+        // use getContext to use the canvas for drawing
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = ctx.createPattern(tempCanvas, 'no-repeat');
+
+        ctx.fillRect(20, 20, 150, 150);
+
+        ctx.rect(0,0,canvas.width,canvas.height);
         ctx.fill();
     }
 
-    }
-    draw();*/
+    players.forEach(player => {
+        var img = new Image();
+        img.src = player.imgSrc;
+        player.img = img;
+        img.onload = function(){
+            draw(player);
+        }
+    })
 
-    function drawPattern(img, size) {
-
-     var tempCanvas = document.createElement("canvas"),
-         tCtx = tempCanvas.getContext("2d");
-
-     tempCanvas.width = size;
-     tempCanvas.height = size;
-     tCtx.drawImage(img, 0, 0, img.width, img.height, 0, 0, size, size);
-
-     // use getContext to use the canvas for drawing
-     var ctx = canvas.getContext('2d');
-     ctx.clearRect(0, 0, canvas.width, canvas.height);
-     ctx.fillStyle = ctx.createPattern(tempCanvas, 'no-repeat');
-     
-     ctx.fillRect(player.rectX, player.rectY, player.rectWidth, player.rectHeight);
-
-     //ctx.beginPath();
-     //ctx.rect(0,0,canvas.width,canvas.height);
-     //ctx.fill();
-
-}
-
-var img = new Image();
-img.src = "player.JPG";
-img.onload = function(){
-    drawPattern(this, 100);
-}
 
 </script>
