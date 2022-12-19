@@ -1,0 +1,100 @@
+<style>
+    canvas {
+       background-color:bisque;
+    }
+   
+</style>
+<canvas id="myCanvas" width="400" height="400"></canvas>
+
+<script>
+  var canvas = document.getElementById("myCanvas");
+  var ctx = canvas.getContext("2d");
+  canvas.height = 500;
+  canvas.width = 500;
+
+  var player = {
+    rectX: 10,
+    rectY : 10,
+    rectWidth : 50,
+    rectHeight : 50,
+    rectColor : "red",
+    rectSpeed : 20
+  }
+
+
+
+
+  function moveRectangle(code) {
+    console.log(code)
+    var speed = player.rectSpeed;
+    switch (code) {
+        case 37: //left
+            player.rectX -= speed;
+        break;
+        case 38: //left
+            player.rectY -= speed;
+        break;
+        case 39: //left
+            player.rectX += speed;
+        break;
+        case 40: //left
+            player.rectY += speed;
+        break;
+
+    }
+    ctx.fillRect(player.rectX, player.rectY, player.rectWidth, player.rectHeight);
+  }
+
+  document.addEventListener("keydown", function(e) {
+    moveRectangle(e.keyCode);
+    })
+
+
+    /*// Draw player character and platforms
+    function draw() {
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw player
+    var img = new Image();
+    img.src = "player.JPG";
+    img.onload = () => {
+        var pat = ctx.createPattern(img, "no-repeat");
+        //ctx.rect(0, 0, 150, 100);
+        ctx.fillStyle = pat;
+        ctx.fillRect(player.rectX, player.rectY, player.rectWidth, player.rectHeight)
+        ctx.fill();
+    }
+
+    }
+    draw();*/
+
+    function drawPattern(img, size) {
+
+     var tempCanvas = document.createElement("canvas"),
+         tCtx = tempCanvas.getContext("2d");
+
+     tempCanvas.width = size;
+     tempCanvas.height = size;
+     tCtx.drawImage(img, 0, 0, img.width, img.height, 0, 0, size, size);
+
+     // use getContext to use the canvas for drawing
+     var ctx = canvas.getContext('2d');
+     ctx.clearRect(0, 0, canvas.width, canvas.height);
+     ctx.fillStyle = ctx.createPattern(tempCanvas, 'no-repeat');
+     
+     ctx.fillRect(player.rectX, player.rectY, player.rectWidth, player.rectHeight);
+
+     //ctx.beginPath();
+     //ctx.rect(0,0,canvas.width,canvas.height);
+     //ctx.fill();
+
+}
+
+var img = new Image();
+img.src = "player.JPG";
+img.onload = function(){
+    drawPattern(this, 100);
+}
+
+</script>
